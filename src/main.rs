@@ -1,8 +1,8 @@
 use actix_web::{get, web, App, HttpServer, Responder};
 
-#[get("/zach")]
+#[get("/zach/{name}")]
 async fn hello(name: web::Path<String>) -> impl Responder {
-    format!("Hello monkey!")
+    format!("Hello {name} your a monkey!")
 }
 
 #[actix_web::main]
