@@ -6,6 +6,7 @@ async fn hello(name: web::Path<String>) -> impl Responder {
 }
 
 async fn check_port() -> u16 {
+    let default_port: u16 = 8080;
     let args: Vec<String> = std::env::args().collect();
     // iterate through arguements checking for port arguement
     for (_index, arg) in args.iter().enumerate() {
@@ -18,14 +19,14 @@ async fn check_port() -> u16 {
                     println!("Port set to {}", port);
                     return port;
                 } else {
-                    println!("No valid port specified defaulting to 8080");
-                    return 8080;
+                    println!("No valid port specified defaulting to {}", default_port);
+                    return default_port;
                 }
             } 
         }
     }
-    // if there are no arguments return 8080
-    return 8080;
+    // if there are no arguments return default port
+    return default_port;
 }
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
