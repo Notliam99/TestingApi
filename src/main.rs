@@ -29,7 +29,7 @@ async fn check_port() -> u16 {
             // check if a arguement exists after -p
             if let Some(port_str) = args.get(_index + 1) {
                 /* if string converts to unsigned 16 int then return the port
-                otherwise error etc. default to 8080 */
+                otherwise error etc. default to default_port */
                 if let Ok(port) = port_str.parse::<u16>() {
                     println!("Port set to {}", port);
                     return port;
