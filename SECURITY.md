@@ -8,4 +8,4 @@
 
 ## Reporting a Vulnerability
 
-Report any varabilty to [contact@nzdev.org](mailto:contat@nzdev.org) imdiatly or bug.
+Report any vunlnerability to [contact@nzdev.org](mailto:contact@nzdev.org) immediately or bug.
