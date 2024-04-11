@@ -3,10 +3,10 @@ use testing_api::{args, paths};
 
 #[actix_web::main]
 async fn main() {
-    // intit the logger
+    // init the logger
     env_logger::init_from_env(env_logger::Env::new().default_filter_or("info"));
 
-    // Port Hellper
+    // Port Helper
     let port = args::check_port();
 
     // Start the api server
