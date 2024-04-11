@@ -1,10 +1,10 @@
-use actix_web::{get, web, App, HttpServer, Responder, Result};
+use actix_web::{get, middleware::Logger, web, App, HttpServer, Responder, Result};
 use serde::Serialize;
 
 // returns path parameter "name" as plain text
 #[get("/hello/plain/{name}")]
 async fn hello(name: web::Path<String>) -> impl Responder {
-    // responds with the below text and path parameter "name" which the user chooses 
+    // responds with the below text and path parameter "name" which the user chooses
     format!("Hello {name} Your A Monkey! 🦍")
 }
 
@@ -21,7 +21,7 @@ async fn json_hello(name: web::Path<String>) -> Result<web::Json<Message>> {
     let message = Message {
         hello: format!("Hello {} Your A Super Monkey! 🙊", name.to_string()),
     };
-    // responds with the json object 'Message' 
+    // responds with the json object 'Message'
     Ok(web::Json(message))
 }
 
@@ -43,18 +43,30 @@ fn check_port() -> u16 {
                     println!("No valid port specified defaulting to {}", default_port);
                     return default_port;
                 }
-            } 
+            }
         }
     }
     // if there are no arguments return default port
     return default_port;
 }
 #[actix_web::main]
-async fn main() -> std::io::Result<()> {
+async fn main() {
+    // intit the logger
+    env_logger::init_from_env(env_logger::Env::new().default_filter_or("info"));
+
+    // Port Hellper
     let port = check_port();
-    // start the api server
-    HttpServer::new(|| App::new().service(hello).service(json_hello))
-        .bind(("127.0.0.1", port))?
-        .run()
-        .await
+
+    // Start the api server
+    HttpServer::new(|| {
+        App::new()
+            .service(hello)
+            .service(json_hello)
+            .wrap(Logger::new("Ip: ( %a ), Path: ( %U ), Latency: ( %Dms )")) // Logging
+    })
+    .bind(("127.0.0.1", port))
+    .unwrap()
+    .run()
+    .await
+    .unwrap()
 }
