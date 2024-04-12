@@ -26,12 +26,12 @@ pub async fn json_hello(name: web::Path<String>) -> Result<web::Json<Message>> {
 }
 
 #[derive(Debug, Deserialize)]
-pub struct Params {
+pub struct HelloParams {
     name: String,
 }
 
 #[get("/hello/qparams")]
-async fn qparams_hello(params: web::Query<Params>) -> HttpResponse {
+async fn qparams_hello(params: web::Query<HelloParams>) -> HttpResponse {
     // responds with the json object 'Message
     HttpResponse::Ok().body(format!("{:?}", params.name))
 }
