@@ -1,6 +1,9 @@
-name: cross-commpile
-run-name: ${{ github.actor }}'s rust compile
-on: workflow_dispatch
+name: cross-compile
+run-name: Rust Cross-Compile
+on: 
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
 jobs:
   release:
     name: Release - ${{ matrix.platform.release_for }}
