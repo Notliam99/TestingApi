@@ -3,12 +3,39 @@ use testing_api::paths::*;
 
 #[actix_web::test]
 async fn test_plain_hello() {
-    let name = "Jim";
+    test_hello_func("/hello/plain/test", "Hello test Your A Monkey! 🦍", hello).await;
+}
 
-    let app = actix_web::test::init_service(App::new().service(hello)).await;
+#[actix_web::test]
+async fn test_qpram_hello() {
+    test_hello_func("/hello/qparams?name=hello", "hello", qparams_hello).await;
+}
+
+#[actix_web::test]
+async fn test_qpram_hello_invalid() {
+    test_hello_func(
+        "/hello/qparams?e=a",
+        "Query deserialize error: missing field `name`",
+        qparams_hello,
+    )
+    .await;
+    test_hello_func(
+        "/hello/qparams",
+        "Query deserialize error: missing field `name`",
+        qparams_hello,
+    )
+    .await;
+}
+
+async fn test_hello_func<F: actix_web::dev::HttpServiceFactory + 'static>(
+    url: &str,
+    body: &str,
+    service: F,
+) {
+    let app = actix_web::test::init_service(App::new().service(service)).await;
 
     let request = actix_web::test::TestRequest::default()
-        .uri(format!("/hello/plain/{name}").as_str())
+        .uri(url)
         .insert_header(header::ContentType::plaintext())
         .to_request();
 
@@ -23,13 +50,12 @@ async fn test_plain_hello() {
     )
     .unwrap();
 
-    assert!(format!("Hello {name} Your A Monkey! 🦍") == body_string)
+    assert!(body == body_string.as_str())
 }
 
 #[actix_web::test]
 async fn test_json_hello() {
     let name = "bob";
-
     let app = actix_web::test::init_service(App::new().service(json_hello)).await;
 
     let request = actix_web::test::TestRequest::default()
@@ -46,29 +72,4 @@ async fn test_json_hello() {
             hello: format!("Hello {name} Your A Super Monkey! 🙊")
         }
     )
-}
-
-#[actix_web::test]
-async fn test_qpram_hello() {
-    let name = "garry";
-
-    let app = actix_web::test::init_service(App::new().service(qparams_hello)).await;
-
-    let request = actix_web::test::TestRequest::default()
-        .uri(format!("/hello/qparams?name={name}").as_str())
-        .insert_header(header::ContentType::plaintext())
-        .to_request();
-
-    let response = actix_web::test::call_service(&app, request).await;
-
-    let body_string = String::from_utf8(
-        actix_web::test::read_body(response)
-            .await
-            .try_into_bytes()
-            .unwrap()
-            .to_vec(),
-    )
-    .unwrap();
-
-    assert!(name == body_string.as_str())
 }
