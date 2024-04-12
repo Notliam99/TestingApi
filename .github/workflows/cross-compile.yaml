@@ -1,4 +1,4 @@
-name: cross-commpile
+name: cross-compile
 run-name: ${{ github.actor }}'s rust compile
 on: 
   push:
