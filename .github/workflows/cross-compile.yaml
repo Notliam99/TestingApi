@@ -1,9 +1,7 @@
 name: cross-compile
-run-name: ${{ github.actor }}'s rust compile
+run-name: Rust Cross-Compile
 on: 
   push:
-    branches: [ "main" ]
-  pull_request:
     branches: [ "main" ]
   workflow_dispatch:
 jobs:
