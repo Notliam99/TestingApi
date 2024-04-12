@@ -12,12 +12,11 @@ pub fn check_port() -> u16 {
                 if let Ok(port) = port_str.parse::<u16>() {
                     println!("Port set to {}", port);
                     return port;
-                } else {
-                    println!("No valid port specified defaulting to {}", default_port);
                 }
             }
         }
     }
     // if there are no arguments return default port
+    println!("No valid port specified defaulting to {}", default_port);
     return default_port;
 }
