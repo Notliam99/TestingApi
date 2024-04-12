@@ -1,5 +1,5 @@
-use actix_web::{get, web, Responder, Result};
-use serde::Serialize;
+use actix_web::{get, web, HttpResponse, Responder, Result};
+use serde::{Deserialize, Serialize};
 
 // returns path parameter "name" as plain text
 #[get("/hello/plain/{name}")]
@@ -23,4 +23,15 @@ pub async fn json_hello(name: web::Path<String>) -> Result<web::Json<Message>> {
     };
     // responds with the json object 'Message'
     Ok(web::Json(message))
+}
+
+#[derive(Debug, Deserialize)]
+pub struct Params {
+    name: String,
+}
+
+#[get("/hello/qparams")]
+async fn qparams_hello(params: web::Query<Params>) -> HttpResponse {
+    // responds with the json object 'Message
+    HttpResponse::Ok().body(format!("{:?}", params.name))
 }

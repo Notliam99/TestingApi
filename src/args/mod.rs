@@ -14,7 +14,6 @@ pub fn check_port() -> u16 {
                     return port;
                 } else {
                     println!("No valid port specified defaulting to {}", default_port);
-                    return default_port;
                 }
             }
         }

@@ -10,24 +10,24 @@ jobs:
           - release_for: Linux-x86_64
             os: ubuntu-20.04
             target: x86_64-unknown-linux-gnu
-            bin: rust_grade
-            name: rust_grade-Linux-x86_64.tar.gz
+            bin: testing_api
+            name: testing_api-Linux-x86_64.tar.gz
             command: build
             path: target/x86_64-unknown-linux-gnu/release
 
           - release_for: Windows-x86_64
             os: windows-latest
             target: x86_64-pc-windows-msvc
-            bin: rust_grade.exe
-            name: rust_grade-Windows-x86_64.zip
+            bin: testing_api.exe
+            name: testing_api-Windows-x86_64.zip
             command: both
             path: target/x86_64-pc-windows-msvc/release
 
           - release_for: MacOS-x86_64
             os: macOS-latest
             target: x86_64-apple-darwin
-            bin: rust_grade
-            name: rust_grade-Darwin-x86_64.tar.gz
+            bin: testing_api
+            name: testing_api-Darwin-x86_64.tar.gz
             command: both
             path: target/x86_64-apple-darwin/release
             # more release targets here ...

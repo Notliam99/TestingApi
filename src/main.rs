@@ -14,6 +14,7 @@ async fn main() {
         App::new()
             .service(paths::hello)
             .service(paths::json_hello)
+            .service(paths::qparams_hello)
             .wrap(Logger::new("Ip: ( %a ), Path: ( %U ), Latency: ( %Dms )")) // Logging
     })
     .bind(("127.0.0.1", port))
