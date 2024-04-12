@@ -9,9 +9,9 @@ pub async fn hello(name: web::Path<String>) -> impl Responder {
 }
 
 // Creates message object for json responses
-#[derive(Serialize)]
+#[derive(Serialize, Deserialize, PartialEq, Eq)]
 pub struct Message {
-    hello: String,
+    pub hello: String,
 }
 
 // returns path parameter "name" as json object
@@ -25,13 +25,13 @@ pub async fn json_hello(name: web::Path<String>) -> Result<web::Json<Message>> {
     Ok(web::Json(message))
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Deserialize)]
 pub struct HelloParams {
-    name: String,
+    pub name: String,
 }
 
 #[get("/hello/qparams")]
 async fn qparams_hello(params: web::Query<HelloParams>) -> HttpResponse {
     // responds with the json object 'Message
-    HttpResponse::Ok().body(format!("{:?}", params.name))
+    HttpResponse::Ok().body(format!("{}", params.name))
 }
