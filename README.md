@@ -5,14 +5,18 @@ This api is a testing ground for our next digital project where we have to be ad
 
 ## How To Use
 ```zsh
-    # To Run The Program
+    # To Run The Program building with source
     cargo run
 
 
-    # Build The Program To `./target/release/build/dit_as_91896_2...`
-    Cargo Build --release 
+    # Build The Program from source (Exports to: `/target/release/build/testing_api`)
+    Cargo build --release 
 
     
     # Run Unit Test's To Prove It Works!!!
-    cargo test
+    cargo test --verbose --package testing_api --test path_test
+
+    # Prebuilt binaries
+
+    SOON
 ```
