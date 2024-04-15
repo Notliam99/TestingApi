@@ -14,7 +14,7 @@ This api is a testing ground for our next digital project where we have to be ad
 
     
     # Run Unit Test's To Prove It Works!!!
-    cargo test --verbose --package testing_api --test path_test
+    cargo test --package testing_api
 
     # Prebuilt binaries
 
