@@ -57,11 +57,11 @@ jobs:
         uses: pozetroninc/github-action-get-latest-release@master
         with:
           repository: ${{ github.repository }}
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ github.token }}
       - name: Release Binary
         uses: AButler/upload-release-assets@v3.0
         with:
           files: "${{ matrix.platform.path }}/${{ matrix.platform.bin }}"
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          repo-token: ${{ github.token }}
           release-id: ${{ steps.release.outputs.id }}
           
