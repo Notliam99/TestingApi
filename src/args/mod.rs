@@ -1,6 +1,15 @@
 use std::io;
 
-// this function checks for the -p or --port flags and returns a unsigned 16 int aka the arg
+///
+/// This function checks for the -p or --port flags and returns a unsigned 16 int aka the arg
+///
+/// # Examples
+///
+/// ```
+/// use testing_api::args::check_port;
+///
+/// assert_eq!(check_port().unwrap(), 8080u16);
+/// ```
 pub fn check_port() -> Result<u16, io::Error> {
     let default_port: u16 = 8080;
     let args: Vec<String> = std::env::args().collect();
