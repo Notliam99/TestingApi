@@ -5,7 +5,7 @@ metadata:
   namespace: testing-api
 spec:
   selector:
-    app: testing-api
+    app: api
   ports:
   - name: http
     targetPort: 8080

@@ -1,37 +1,30 @@
-# https://kubernetes.io/docs/concepts/workloads/controllers/deployment/
-apiVersion: apps/v1
 kind: Deployment
+apiVersion: apps/v1
 metadata:
-  name: testing-api-deployment 
+  name: testing-api-deployment
   namespace: testing-api
   labels:
-    app: testing-api-deployment
+    app: api
 spec:
-  selector:
-    matchLabels:
-      app: testing-api
-  replicas: 2
+  replicas: 3
+  progressDeadlineSeconds: 600
+  revisionHistoryLimit: 1
   strategy:
     type: RollingUpdate
     rollingUpdate:
+      maxSurge: 1
       maxUnavailable: 1
+  selector:
+    matchLabels:
+      app: api
   template:
     metadata:
-      annotations:
-        kubectl.kubernetes.io/default-container:  testing-api-deployment
       labels:
-        app: testing-api
+        app: api
     spec:
-      # initContainers:
-        # Init containers are exactly like regular containers, except:
-          # - Init containers always run to completion.
-          # - Each init container must complete successfully before the next one starts.
       containers:
-      - name: testing-api
-        image: asskit/testing_api:535f4381d2f05b3b0c428d3f415e9298bc515243
-        imagePullPolicy: IfNotPresent
-        ports:
-        - name: web
-          containerPort: 8080
----
-
+        - name: test-api
+          image: asskit/testing_api:535f4381d2f05b3b0c428d3f415e9298bc515243
+          ports:
+          - name: web
+            containerPort: 8080
