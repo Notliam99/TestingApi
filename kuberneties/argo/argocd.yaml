@@ -1,0 +1,19 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: testing-api
+spec:
+  destination:
+    name: ''
+    namespace: TestingApi
+    server: 'https://kubernetes.default.svc'
+  source:
+    path: ./kuberneties
+    repoURL: 'https://github.com/Notliam99/TestingApi.git'
+    targetRevision: kuberneties-manafests
+  sources: []
+  project: dit-websites
+  syncPolicy:
+    automated:
+      prune: false
+      selfHeal: false
