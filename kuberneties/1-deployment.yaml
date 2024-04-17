@@ -29,15 +29,7 @@ spec:
       containers:
       - name: testing-api
         image: asskit/testing_api:535f4381d2f05b3b0c428d3f415e9298bc515243
-        imagePullPolicy: IfNotPresent 
-        livenessProbe:
-          tcpSocket:
-            port: 8080
-          initialDelaySeconds: 5
-          timeoutSeconds: 5
-          successThreshold: 1
-          failureThreshold: 3
-          periodSeconds: 10
+        imagePullPolicy: IfNotPresent
         ports:
         - name: web
           containerPort: 8080
