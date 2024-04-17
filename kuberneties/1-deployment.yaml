@@ -9,26 +9,25 @@ metadata:
 spec:
   selector:
     matchLabels:
-      app: testing-api-deployment
+      app: testing-api
   replicas: 2
   strategy:
-    rollingUpdate:
-      maxSurge: 25%
-      maxUnavailable: 25%
     type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
   template:
     metadata:
       annotations:
         kubectl.kubernetes.io/default-container:  testing-api-deployment
       labels:
-        app: testingapi
+        app: testing-api
     spec:
       # initContainers:
         # Init containers are exactly like regular containers, except:
           # - Init containers always run to completion.
           # - Each init container must complete successfully before the next one starts.
       containers:
-      - name: testingapi
+      - name: testing-api
         image: asskit/testing_api:latest
         imagePullPolicy: IfNotPresent 
         livenessProbe:
