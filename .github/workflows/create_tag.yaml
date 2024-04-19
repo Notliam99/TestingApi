@@ -40,7 +40,6 @@ jobs:
         with:
           push: true
           tags: |
-            ghcr.io/${{ env.REPO }}:latest
             ghcr.io/${{ env.REPO }}:${{ inputs.tag_name }}
           file: ./Dockerfile
 
@@ -68,7 +67,6 @@ jobs:
         with:
           push: true
           tags: |
-            asskit/testing_api:latest
             asskit/testing_api:${{ inputs.tag_name }}
           file: ./Dockerfile
 
