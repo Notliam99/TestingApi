@@ -70,7 +70,36 @@ jobs:
             asskit/testing_api:${{ inputs.tag_name }}
           file: ./Dockerfile
 
+
+  kuberneties_update:
+    needs: build-docker
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:     
+      - name: Checkout # checkout your sources file
+        uses: actions/checkout@v4
+
+      - name: Update values.yaml
+        uses: fjogeleit/yaml-update-action@main
+        with:
+          valueFile: 'kube/1-deployment.yaml'
+          propertyPath: 'spec.template.spec.containers.0.image'
+          value: '${{ github.REPO }}/notes:${{ inputs.tag_name }}'
+          commitChange: false
+      
+      - name: Commit and push changes
+        uses: devops-infra/action-commit-push@master
+        with:
+          github_token: ${{ github.token }}
+          commit_message: Kuberneties update to [ ${{ secrets.DOCKER_USER }}/notes:${{ github.sha }} ]
+
+      - name: Refresh-Argocd
+        run: curl 'https://argocd.nzdev.org/api/v1/applications/testing-api?refresh=normal&appNamespace=argocd'
+
+
   create_tag:
+    needs: kuberneties_update
     runs-on: ubuntu-latest
     permissions:
       contents: write
