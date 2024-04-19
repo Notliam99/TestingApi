@@ -1,13 +1,9 @@
 name: Build and Test
 
 on:
-  workflow_dispatch:
   push:
     branches:
       - main
-
-env:
-  IMAGE_NAME: ${{ github.repository }}
 
 jobs:
   dockerBuild-Push:
@@ -44,7 +40,7 @@ jobs:
     permissions:
       contents: read
       packages: write
-    steps:     
+    steps:
       - name: Checkout repository
         uses: actions/checkout@v3
 
