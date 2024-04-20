@@ -1,0 +1,18 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: testing-api-ingress
+  namespace: testing-api
+  annotations:
+    kubernetes.io/ingress.class: traefik-external
+    link.argocd.argoproj.io/external-link: 'https://testapi.nzdev.org/'
+spec:
+  entryPoints:
+    - websecure
+
+  routes:    
+    - match: Host(`testapi.nzdev.org`)
+      kind: Rule
+      services:
+        - name: testing-api-service
+          port: 80

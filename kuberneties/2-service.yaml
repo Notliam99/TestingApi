@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: testing-api-service
+  namespace: testing-api
+spec:
+  selector:
+    app: test-api
+  ports:
+  - name: http
+    targetPort: 8080
+    port: 80
+---

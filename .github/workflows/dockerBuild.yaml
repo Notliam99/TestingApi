@@ -1,4 +1,4 @@
-name: Build and Test
+name: Docker Build
 
 on:
   push:
@@ -33,8 +33,8 @@ jobs:
         with:
           push: true
           tags: |
-            ghcr.io/${{ env.REPO }}:latest
             ghcr.io/${{ env.REPO }}:${{ github.sha }}
+            ghcr.io/${{ env.REPO }}:latest
           file: ./Dockerfile
 
   dockerHubBuild-Push:
@@ -60,6 +60,6 @@ jobs:
         with:
           push: true
           tags: |
-            asskit/testing_api:latest
             asskit/testing_api:${{ github.sha }}
+            asskit/testing_api:latest
           file: ./Dockerfile 

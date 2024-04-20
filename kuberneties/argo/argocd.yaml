@@ -1,0 +1,12 @@
+project: dit-websites
+
+source:
+  repoURL: 'https://github.com/Notliam99/TestingApi.git'
+  path: kuberneties
+  targetRevision: main
+  destination:
+  server: 'https://kubernetes.default.svc'
+  namespace: testing-api
+
+syncPolicy:
+  automated: {}
