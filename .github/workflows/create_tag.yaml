@@ -11,66 +11,9 @@ on:
         description: 'Do you want to publish to DockerHub'
         required: true
         type: boolean
+        default: true
     
 jobs:
-  build-docker:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
-    steps:     
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Log in to GitHub container registry
-        uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ github.token }}
-
-      - name: Lowercase the repo name and username
-        run: echo "REPO=${GITHUB_REPOSITORY,,}" >>${GITHUB_ENV}
-
-      - name: Build and push container image to registry
-        uses: docker/build-push-action@v5
-        with:
-          push: true
-          tags: |
-            ghcr.io/${{ env.REPO }}:${{ inputs.tag_name }}
-          file: ./Dockerfile
-
-  dockerHubBuild-Push:
-    if: inputs.build_docker_hub == true
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
-    steps:     
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Log in to GitHub container registry
-        uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKER_USER }}
-          password: ${{ secrets.DOCKER_TOKEN }}
-
-      - name: Build and push container image to registry
-        uses: docker/build-push-action@v5
-        with:
-          push: true
-          tags: |
-            asskit/testing_api:${{ inputs.tag_name }}
-          file: ./Dockerfile
-
-
   kuberneties_update:
     needs: build-docker
     runs-on: ubuntu-latest
@@ -85,26 +28,27 @@ jobs:
         with:
           valueFile: 'kube/1-deployment.yaml'
           propertyPath: 'spec.template.spec.containers.0.image'
-          value: '${{ github.REPO }}/notes:${{ inputs.tag_name }}'
+          value: 'ghcr.io/${{ env.REPO }}:${{ inputs.tag_name }}'
           commitChange: false
-      
-      - name: Commit and push changes
-        uses: devops-infra/action-commit-push@master
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v6
         with:
-          github_token: ${{ github.token }}
-          commit_message: Kuberneties update to [ ${{ secrets.DOCKER_USER }}/notes:${{ github.sha }} ]
+          title: "[Kuberneties Image Update]: (Tag) = ${{ inputs.tag_name }}"
+          commit-message: "[Kuberneties Image Update]: (Tag) = ${{ inputs.tag_name }}"
+          body: |
+            # Kuberneties image update
+            This is a automated image updater for tag creations.
+          
+            ### Important notes
+            on merge of this pull request it will form a new tag and refresh the web deployment.
+          branch: CreateTag_${{ inputs.tag_name }}
+          labels: |
+            enhancement
+            Automated Pull Request
 
-      - name: Refresh-Argocd
-        run: curl 'https://argocd.nzdev.org/api/v1/applications/testing-api?refresh=normal&appNamespace=argocd'
+      - name: save-dockerHub-OPT
+        run: $BUILD_DOCKER_HUB = "${{ inputs.build_docker_hub }}"
 
-
-  create_tag:
-    needs: kuberneties_update
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    steps:
-      - name: Run latest-tag
-        uses: EndBug/latest-tag@latest
-        with:
-          ref: ${{ inputs.tag_name }}
+      - name: save-tag_name-OPT
+        run: $NEW_TAG_NAME = "${{ inputs.tag_name }}"
