@@ -39,6 +39,9 @@ jobs:
           body: |
             # Kuberneties image update
             This is a automated image updater for tag creations.
+          
+            ### Important notes
+            on merge of this pull request it will form a new tag and refresh the web deployment.
           branch: CreateTag_${{ inputs.tag_name }}
           labels: |
             enhancement
