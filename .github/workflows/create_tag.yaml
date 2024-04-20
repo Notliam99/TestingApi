@@ -28,7 +28,7 @@ jobs:
         with:
           valueFile: 'kube/1-deployment.yaml'
           propertyPath: 'spec.template.spec.containers.0.image'
-          value: '${{ github.REPO }}/notes:${{ inputs.tag_name }}'
+          value: 'ghcr.io/${{ env.REPO }}:${{ inputs.tag_name }}'
           commitChange: false
 
       - name: Create Pull Request
