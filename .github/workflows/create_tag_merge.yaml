@@ -88,4 +88,7 @@ jobs:
         with:
           ref: ${{ vars.NEW_TAG_NAME }}
 
+      - name: Refresh-Argocd
+        run: curl 'https://argocd.nzdev.org/api/v1/applications/testing-api?refresh=normal&appNamespace=argocd'
+
 
