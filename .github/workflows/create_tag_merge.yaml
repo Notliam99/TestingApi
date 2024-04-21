@@ -7,7 +7,7 @@ on:
 
 jobs:
   check:
-    if: github.event.pull_request.merged && startsWith(github.event.pull_request.title, "[Kuberneties Image Update]") && contains(github.event.pull_request.lables, "Automated Pull Request")
+    if: github.event.pull_request.merged && startsWith(github.event.pull_request.title, '[Kuberneties Image Update]') && contains(github.event.pull_request.lables, 'Automated Pull Request')
     runs-on: ubuntu-latest
     steps:
       - name: pass
