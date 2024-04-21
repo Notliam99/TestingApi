@@ -46,7 +46,16 @@ jobs:
           token: ${{ secrets.PAT }}
 
       - name: save-dockerHub-OPT
-        run: $BUILD_DOCKER_HUB = "${{ inputs.build_docker_hub }}"
+        uses: action-pack/set-variable@v1
+        with:
+          name: 'BUILD_DOCKER_HUB'
+          value: '${{ inputs.build_docker_hub }}'
+          token: ${{ secrets.PAT }}
 
       - name: save-tag_name-OPT
-        run: $NEW_TAG_NAME = "${{ inputs.tag_name }}"
+        uses: action-pack/set-variable@v1
+        with:
+          name: 'NEW_TAG_NAME'
+          value: '${{ inputs.tag_name }}'
+          token: ${{ secrets.PAT }}
+
