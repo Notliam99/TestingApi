@@ -1,3 +1,4 @@
+name: create new tag & images
 on:
   pull_request:
     branches: 
