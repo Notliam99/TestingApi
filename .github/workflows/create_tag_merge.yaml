@@ -9,13 +9,16 @@ jobs:
   check:
     if: github.event.pull_request.merged && startsWith(github.event.pull_request.title, '[Kuberneties Image Update]')
     runs-on: ubuntu-latest
+    permissions:
+      pull-requests: read
+      checks: write
     steps:
       - name: pass
         uses: danielchabr/pr-labels-checker@v3.3
         id: checkLabel
         with:
           hasAll: Automated Image Update
-          githubToken: ${{ secrets.PAT }}
+          githubToken: ${{ github.token }}
 
   build-docker:
     needs: check
