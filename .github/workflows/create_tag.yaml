@@ -41,7 +41,7 @@ jobs:
           branch: CreateTag_${{ inputs.tag_name }}
           labels: |
             enhancement
-            Automated Pull Request
+            Automated Image Update
           base: main
           token: ${{ secrets.PAT }}
 
