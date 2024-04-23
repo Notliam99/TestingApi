@@ -53,7 +53,7 @@ jobs:
 
 
   build-docker-hub:
-    if: vars.BUILD_DOCKER_HUB == true
+    if: vars.BUILD_DOCKER_HUB == 'true'
     needs: check
     runs-on: ubuntu-latest
     permissions:
