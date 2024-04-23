@@ -13,7 +13,7 @@ jobs:
         run: echo "${{ github.event.pull_request.title }}\n\n${{ startsWith(github.event.pull_request.title, '[Kuberneties Image Update]') }}"
 
       - name: lables
-        run: echo "${{ github.event.pull_request.lables.*.names }}\n\n${{ contains(github.event.pull_request.lables.*.name, 'Automated Image Update') }}
+        run: echo "${{ github.event.pull_request.lables.*.names }}\n\n${{ contains(github.event.pull_request.lables.*.name, 'Automated Image Update') }}"
 
       - name: merged
         run: echo "${{ github.event.pull_request.merged }}"
