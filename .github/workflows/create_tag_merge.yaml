@@ -7,7 +7,7 @@ on:
 
 jobs:
   echo:
-    runs-on:
+    runs-on: ubuntu-latest
     steps:
       - name: title of pr
         run: echo "${{ github.event.pull_request.title }}\n\n${{ startsWith(github.event.pull_request.title, '[Kuberneties Image Update]') }}"
