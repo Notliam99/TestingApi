@@ -6,25 +6,16 @@ on:
     types: [closed]
 
 jobs:
-  echo:
-    runs-on: ubuntu-latest
-    steps:
-      - name: title of pr
-        run: echo "${{ github.event.pull_request.title }}\n\n${{ startsWith(github.event.pull_request.title, '[Kuberneties Image Update]') }}"
-
-      - name: lables
-        run: echo "${{ github.event.pull_request.lables.*.names }}\n\n${{ contains(github.event.pull_request.lables.*.name, 'Automated Image Update') }}"
-
-      - name: merged
-        run: echo "${{ github.event.pull_request.merged }}"
-
-
   check:
-    if: github.event.pull_request.merged && startsWith(github.event.pull_request.title, '[Kuberneties Image Update]') && contains(github.event.pull_request.lables.*.name, 'Automated Image Update')
+    if: github.event.pull_request.merged && startsWith(github.event.pull_request.title, '[Kuberneties Image Update]')
     runs-on: ubuntu-latest
     steps:
       - name: pass
-        run: echo "Passed"
+        uses: danielchabr/pr-labels-checker@v3
+        id: checkLabel
+        with:
+          hasAll: Automated Image Update
+          githubToken: ${{ secrets.PAT }}
 
   build-docker:
     needs: check
