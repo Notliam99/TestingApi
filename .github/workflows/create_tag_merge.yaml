@@ -49,6 +49,7 @@ jobs:
           push: true
           tags: |
             ghcr.io/${{ env.REPO }}:${{ vars.NEW_TAG_NAME }}
+            ghcr.io/${{ env.REPO }}:latest
           file: ./Dockerfile
 
 
@@ -78,6 +79,7 @@ jobs:
           push: true
           tags: |
             asskit/testing_api:${{ vars.NEW_TAG_NAME }}
+            asskit/testing_api:latest
           file: ./Dockerfile
 
   create_tag:
