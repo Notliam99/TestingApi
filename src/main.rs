@@ -12,7 +12,10 @@ async fn main() {
             .service(paths::hello)
             .service(paths::json_hello)
             .service(paths::qparams_hello)
-            .wrap(Logger::new("Ip: ( %a ), Path: ( %U ), Latency: ( %Dms )")) // Logging
+            .wrap(
+                Logger::new("Response: [%s], Ip: ( %{r}a ), Path: ( %U ), Latency: ( %Dms )")
+                    .log_target("Http_Logs"),
+            ) // Logging
     })
     .bind(("0.0.0.0", args::check_port().unwrap()))
     .unwrap()
