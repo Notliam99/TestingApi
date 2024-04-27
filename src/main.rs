@@ -17,7 +17,7 @@ async fn main() {
                     .log_target("Http_Logs"),
             ) // Logging
     })
-    .bind(("0.0.0.0", args::check_port().unwrap()))
+    .bind(("0.0.0.0", args::arg_port()))
     .unwrap()
     .run()
     .await
