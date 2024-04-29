@@ -20,8 +20,8 @@ This api is a testing ground for our next digital project where we have to be ad
     
     # Run Unit Test's To Prove It Works!!!
     cargo test --package testing_api
-
-    # Prebuilt binaries
-
-    SOON
 ```
+
+# Prebuilt binaries
+
+[<img src="https://img.shields.io/badge/Binaries-purple.svg?logo=buildkite">](https://github.com/Notliam99/TestingApi/releases/latest)
