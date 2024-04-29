@@ -9,19 +9,29 @@
 This api is a testing ground for our next digital project where we have to be adapted to this dynamic. In other words we are giving it a trial run. 👍🏿
 
 ## How To Use
-```zsh
-    # To Run The Program building with source
-    cargo run
 
+[<img src="https://img.shields.io/badge/Prebuilt%20Binaries-29b9cc.svg" height="35">](https://github.com/Notliam99/TestingApi/releases/latest)
+</br>
 
-    # Build The Program from source (Exports to: `/target/release/build/testing_api`)
-    Cargo build --release 
+## Using source:
 
-    
-    # Run Unit Test's To Prove It Works!!!
-    cargo test --package testing_api
+Make sure to download [RUSTUP](rustup.rs) before trying to run or build from source as the program is coded in [Rust](https://www.rust-lang.org/)
+
+### Run from source immediately after building in debug mode. (Exports to: `target/debug`)
+```zhs
+cargo run
 ```
 
-# Prebuilt binaries
 
-[<img src="https://img.shields.io/badge/Binaries-purple.svg?logo=buildkite">](https://github.com/Notliam99/TestingApi/releases/latest)
+### Build from source in release mode. (Exports to: `target/release`)
+```zhs
+cargo build --release 
+```
+
+## Unit Testing:
+
+### Run Unit Tests
+```zhs
+cargo test --package testing_api
+```
+
