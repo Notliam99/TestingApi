@@ -31,7 +31,11 @@ pub struct HelloParams {
 }
 
 #[get("/hello/qparams")]
-async fn qparams_hello(params: web::Query<HelloParams>) -> HttpResponse {
+pub async fn qparams_hello(params: web::Query<HelloParams>) -> HttpResponse {
     // responds with the json object 'Message
     HttpResponse::Ok().body(format!("{}", params.name))
+}
+
+pub async fn catch_all() -> HttpResponse {
+    HttpResponse::NotFound().body(format!("404!"))
 }

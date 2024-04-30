@@ -12,6 +12,7 @@ async fn main() {
             .service(paths::hello)
             .service(paths::json_hello)
             .service(paths::qparams_hello)
+            .default_service(actix_web::web::to(paths::catch_all))
             .wrap(
                 Logger::new("Response: [%s], Ip: ( %{r}a ), Path: ( %U ), Latency: ( %Dms )")
                     .log_target("Http_Logs"),
