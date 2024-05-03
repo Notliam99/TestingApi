@@ -24,7 +24,7 @@ spec:
     spec:
       containers:
         - name: test-api
-          image: ghcr.io/notliam99/testingapi:v0.0.3
+          image: ghcr.io/notliam99/testingapi:v0.0.4
           ports:
             - name: web
               containerPort: 8080
