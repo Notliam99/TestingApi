@@ -1,6 +1,9 @@
 use actix_web::{get, web, HttpResponse, Responder, Result};
+use actix_web_httpauth;
 use serde::{Deserialize, Serialize};
 use utoipa::{IntoParams, ToSchema};
+#[path = "auth/mod.rs"]
+pub mod auth;
 
 // returns path parameter "name" as plain text
 #[utoipa::path(
@@ -24,7 +27,7 @@ pub struct Message {
 #[utoipa::path(
     responses(
         (status = 200, description = "Valid Name Entered", body = Message)
-    ),
+    )
 )]
 #[get("/hello/json/{name}")]
 pub async fn json_hello(name: web::Path<String>) -> Result<web::Json<Message>> {
@@ -58,4 +61,38 @@ pub async fn qparams_hello(params: web::Query<HelloParams>) -> HttpResponse {
 
 pub async fn catch_all() -> HttpResponse {
     HttpResponse::NotFound().body(format!("404!"))
+}
+
+#[utoipa::path(
+    get,
+    path = "/protected/hello/{name}",
+    tag = "protected", 
+    responses(
+        (status = 200, description = "Valid Authentication"),
+        (status = 401, description = "Invalid Request, Unautharized")
+    ),
+    params(
+        ("name", description = "Name for response body."),
+    ),
+    security(("helloAuth" = []))
+)]
+#[get(
+    "/hello/{name}",
+    wrap = "actix_web_httpauth::middleware::HttpAuthentication::basic(auth::do_hello_auth)"
+)]
+pub async fn protected_hello(name: web::Path<String>) -> impl Responder {
+    // responds with the below text and path parameter "name" which the user chooses
+    format!("Hello {name} Your A Monkey! 🦍 (protected)")
+}
+
+#[get(
+    "/hello",
+    wrap = "actix_web_httpauth::middleware::HttpAuthentication::basic(auth::do_hello_auth)"
+)]
+pub async fn protected_hello_index(req: actix_web::HttpRequest) -> HttpResponse {
+    // responds with the below text.
+    HttpResponse::BadRequest().body(format!(
+        "Required parameter 'name' not found, check http://{}/docs",
+        req.connection_info().host()
+    ))
 }

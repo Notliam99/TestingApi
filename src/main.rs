@@ -1,6 +1,6 @@
-use actix_web::{middleware::Logger, App, HttpServer};
+use actix_web::{middleware::Logger, web, App, HttpResponse, HttpServer};
 use testing_api::{args, paths};
-use utoipa::OpenApi;
+use utoipa::{self, OpenApi};
 use utoipa_swagger_ui::SwaggerUi;
 
 #[actix_web::main]
@@ -10,14 +10,24 @@ async fn main() {
 
     #[derive(OpenApi)]
     #[openapi(
-        paths(paths::hello, paths::json_hello, paths::qparams_hello),
+        paths(
+            paths::hello,
+            paths::json_hello,
+            paths::qparams_hello,
+            paths::protected_hello
+        ),
         components(schemas(paths::Message))
     )]
     struct ApiDoc;
 
     // Start the api server with port helper (args::check_port())
-    HttpServer::new(|| {
+    HttpServer::new(move || {
         App::new()
+            .service(
+                web::scope("/protected")
+                    .service(paths::protected_hello)
+                    .service(paths::protected_hello_index),
+            )
             .service(paths::hello)
             .service(paths::json_hello)
             .service(paths::qparams_hello)
