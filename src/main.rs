@@ -1,6 +1,6 @@
-use actix_web::{middleware::Logger, App, HttpServer};
+use actix_web::{middleware::Logger, web, App, HttpResponse, HttpServer};
 use testing_api::{args, paths};
-use utoipa::OpenApi;
+use utoipa::{self, OpenApi};
 use utoipa_swagger_ui::SwaggerUi;
 
 #[actix_web::main]
@@ -10,14 +10,48 @@ async fn main() {
 
     #[derive(OpenApi)]
     #[openapi(
-        paths(paths::hello, paths::json_hello, paths::qparams_hello),
+        paths(
+            paths::hello,
+            paths::json_hello,
+            paths::qparams_hello,
+            paths::protected_hello
+        ),
         components(schemas(paths::Message))
     )]
     struct ApiDoc;
 
+    let mut docs: utoipa::openapi::OpenApi = ApiDoc::openapi();
+    if let Some(schema) = docs.components.as_mut() {
+        schema.add_security_scheme(
+            "helloAuth",
+            utoipa::openapi::security::SecurityScheme::Http(
+                utoipa::openapi::security::HttpBuilder::new()
+                    .scheme(utoipa::openapi::security::HttpAuthScheme::Basic)
+                    .description(Some(
+                        "Basic HTTP Authentication, any username works password is: pass",
+                    ))
+                    .build(),
+            ),
+        );
+    }
+
     // Start the api server with port helper (args::check_port())
-    HttpServer::new(|| {
+    HttpServer::new(move || {
         App::new()
+            .service(
+                web::scope("/protected")
+                    .wrap(actix_web::middleware::ErrorHandlers::new().handler(
+                        actix_web::http::StatusCode::UNAUTHORIZED,
+                        |res| {
+                            println!("EH");
+                            Ok(actix_web::middleware::ErrorHandlerResponse::Response(
+                                res.into_response(HttpResponse::Unauthorized().body("401 Unauthorized: Sorry this page is protected and you are a dumbass lol").map_into_left_body()),
+                            ))
+                        },
+                    ))
+                    .service(paths::protected_hello)
+                    .service(paths::protected_hello_index),
+            )
             .service(paths::hello)
             .service(paths::json_hello)
             .service(paths::qparams_hello)
