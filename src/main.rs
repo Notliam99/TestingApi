@@ -40,6 +40,15 @@ async fn main() {
         App::new()
             .service(
                 web::scope("/protected")
+                    .wrap(actix_web::middleware::ErrorHandlers::new().handler(
+                        actix_web::http::StatusCode::UNAUTHORIZED,
+                        |res| {
+                            println!("EH");
+                            Ok(actix_web::middleware::ErrorHandlerResponse::Response(
+                                res.into_response(HttpResponse::Unauthorized().body("401 Unauthorized: Sorry this page is protected and you are a dumbass lol").map_into_left_body()),
+                            ))
+                        },
+                    ))
                     .service(paths::protected_hello)
                     .service(paths::protected_hello_index),
             )
