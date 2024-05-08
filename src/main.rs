@@ -20,6 +20,21 @@ async fn main() {
     )]
     struct ApiDoc;
 
+    let mut docs: utoipa::openapi::OpenApi = ApiDoc::openapi();
+    if let Some(schema) = docs.components.as_mut() {
+        schema.add_security_scheme(
+            "helloAuth",
+            utoipa::openapi::security::SecurityScheme::Http(
+                utoipa::openapi::security::HttpBuilder::new()
+                    .scheme(utoipa::openapi::security::HttpAuthScheme::Basic)
+                    .description(Some(
+                        "Basic HTTP Authentication, any username works password is: pass",
+                    ))
+                    .build(),
+            ),
+        );
+    }
+
     // Start the api server with port helper (args::check_port())
     HttpServer::new(move || {
         App::new()
