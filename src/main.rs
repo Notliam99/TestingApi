@@ -43,7 +43,6 @@ async fn main() {
                     .wrap(actix_web::middleware::ErrorHandlers::new().handler(
                         actix_web::http::StatusCode::UNAUTHORIZED,
                         |res| {
-                            println!("EH");
                             Ok(actix_web::middleware::ErrorHandlerResponse::Response(
                                 res.into_response(HttpResponse::Unauthorized().body("401 Unauthorized: Sorry this page is protected and you are a dumbass lol").map_into_left_body()),
                             ))
@@ -55,9 +54,8 @@ async fn main() {
             .service(paths::hello)
             .service(paths::json_hello)
             .service(paths::qparams_hello)
-            .service(
-                SwaggerUi::new("/docs/{_:.*}").url("/api-docs/openapi.json", ApiDoc::openapi()),
-            )
+            .service(SwaggerUi::new("/docs/{_:.*}").url("/api-docs/openapi.json", docs.clone()))
+            .service(web::redirect("/docs", "/docs/"))
             .default_service(actix_web::web::to(paths::catch_all))
             .wrap(
                 Logger::new("Response: [%s], Ip: ( %{r}a ), Path: ( %U ), Latency: ( %Dms )")
